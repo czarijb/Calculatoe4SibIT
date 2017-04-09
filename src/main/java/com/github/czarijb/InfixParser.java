@@ -1,12 +1,11 @@
 package com.github.czarijb;
 
 
+import static com.github.czarijb.Token.*;
+
 public class InfixParser {
-    //  Add tokens
-    final int NONE = 0;         //  FAIL
-    final int DELIMITER = 1;    //  Разделитель(+-*/=)
-    final int VARIABLE = 2;     //  Переменная
-    final int NUMBER = 3;       //  Число
+
+    private Token tokType;
 
     //  Constant Declaration syntax error
     final int SYNTAXERROR = 0;  //  Синтаксическая ошибка в выражении
@@ -20,7 +19,7 @@ public class InfixParser {
     private String expression;
     private int explds;
     private String token;
-    private int tokType;
+    /*private int tokType;*/
 
 
     public String toString() {

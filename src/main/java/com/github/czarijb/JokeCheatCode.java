@@ -6,7 +6,7 @@ import javax.script.ScriptEngineManager;
 public class JokeCheatCode {
 
 
-    public String cheatCode (String example) throws Exception{
-        return String.valueOf(new ScriptEngineManager().getEngineByName("JavaScript").eval(example));
+    public Double cheatCode (String example) throws Exception{
+        return (Double) new ScriptEngineManager().getEngineByName("JavaScript").eval(example);
     }
 }
