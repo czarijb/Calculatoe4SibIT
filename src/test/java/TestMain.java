@@ -1,10 +1,8 @@
-import com.github.czarijb.InfixParser;
-import com.github.czarijb.JokeCheatCode;
-import com.github.czarijb.ParserException;
-import com.github.czarijb.TokenType;
+import com.github.czarijb.*;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 /**
@@ -26,5 +24,20 @@ public class TestMain {
         double res = jokeCheatCode.cheatCode("1-2+5*5/25+1/2");
         Assert.assertTrue(res == 0.5);
     }
+    @Test
+    public void testHandleErr() {
 
+        Method method = null;
+        String testString = "No Expression Present";
+        try {
+            method = InfixParser.class.getDeclaredMethod("handleErr");
+            method.setAccessible(true);
+            String str = (String) method.invoke(infixParser, ErrorType.NOEXP);
+            Assert.assertTrue(str.equals(testString));
+        } catch (Exception e) {
+
+        }
+
+
+    }
 }
