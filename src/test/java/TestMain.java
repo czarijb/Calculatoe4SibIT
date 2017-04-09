@@ -49,4 +49,11 @@ public class TestMain {
     public void testEvaluateWithoutExpression() throws ParseException {
         infixParser.evaluate("");
     }
+
+    @Test
+    public void testReplGetInstance(){
+        REPL repl = REPL.getInstance();
+        REPL repl1 = REPL.getInstance();
+        Assert.assertTrue(repl.equals(repl1));
+    }
 }

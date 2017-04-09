@@ -1,2 +1,2 @@
-.. image:: https://secure.travis-ci.org/adw0rd/django-multi-sessions.png
+.. image:: https://travis-ci.org/czarijb/Calculatoe4SibIT.svg?branch=master
     :target: https://travis-ci.org/czarijb/Calculatoe4SibIT
