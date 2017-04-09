@@ -13,7 +13,8 @@ import java.text.ParseException;
 public class REPL {
     private static REPL ourInstance = new REPL();
     private static final String EXIT_COMAND = "exit";
-    private static final Logger LOG = LoggerFactory.getLogger(REPL.class);
+private static final Logger LOG = LoggerFactory.getLogger(REPL.class);
+
 
     public static REPL getInstance() {
         return ourInstance;
@@ -43,8 +44,10 @@ public class REPL {
 
             } catch (final ParseException e) {
                 LOG.debug(e.getMessage());
+
             } catch (final Throwable e) {
-               LOG.debug(e.getMessage());
+                LOG.debug(e.getMessage());
+
             }
         }
     }

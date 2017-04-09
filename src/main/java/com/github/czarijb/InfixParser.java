@@ -49,7 +49,7 @@ public class InfixParser {
                 token += expression.charAt(explds);
                 explds++;
                 if (explds >= expression.length())
-                    return;
+                    break;
             }
             tokType = VARIABLE;
         } else if (Character.isDigit(expression.charAt(explds))) {
@@ -57,7 +57,7 @@ public class InfixParser {
                 token += expression.charAt(explds);
                 explds++;
                 if (explds >= expression.length()) {
-                    return;
+                    break;
                 }
             }
             tokType = NUMBER;

@@ -17,7 +17,7 @@ public class TestMain {
 
     @Test
     public void testCheatCode() throws Exception {
-        double res = jokeCheatCode.cheatCode("1-2+5*5/25");
+        double res = jokeCheatCode.cheatCode("1.25-2.25+5*5/25");
         Assert.assertTrue(res < 0.0000001);
     }
 
