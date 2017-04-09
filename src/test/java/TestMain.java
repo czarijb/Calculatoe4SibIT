@@ -1,8 +1,11 @@
 import com.github.czarijb.InfixParser;
 import com.github.czarijb.JokeCheatCode;
 import com.github.czarijb.ParserException;
+import com.github.czarijb.TokenType;
 import org.junit.Assert;
 import org.junit.Test;
+
+import java.lang.reflect.Method;
 
 /**
  * Created by aleksandr on 09.04.17.
@@ -23,4 +26,5 @@ public class TestMain {
         double res = jokeCheatCode.cheatCode("1-2+5*5/25+1/2");
         Assert.assertTrue(res == 0.5);
     }
+
 }

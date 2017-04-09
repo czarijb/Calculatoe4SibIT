@@ -1,16 +1,14 @@
 package com.github.czarijb;
 
 
-import static com.github.czarijb.Token.*;
+import static com.github.czarijb.ErrorType.DIVBYZERO;
+import static com.github.czarijb.ErrorType.NOEXP;
+import static com.github.czarijb.ErrorType.SYNTAXERROR;
+import static com.github.czarijb.TokenType.*;
 
 public class InfixParser {
 
-    private Token tokType;
-
-    //  Constant Declaration syntax error
-    final int SYNTAXERROR = 0;  //  Синтаксическая ошибка в выражении
-    final int NOEXP = 1;        //  Отсутствует выражение при запуске анализатора
-    final int DIVBYZERO = 2;    //  Ошибка деления на ноль
+    private TokenType tokType;
 
     //  The token that defines the end of the expression
     final String EOFEXPRES = "\0";
@@ -19,11 +17,11 @@ public class InfixParser {
     private String expression;
     private int explds;
     private String token;
-    /*private int tokType;*/
+
 
 
     public String toString() {
-        return String.format("Exp = {0}\nexplds = {1}\nToken = {2}\nTokType = {3}", expression.toString(), explds,
+        return String.format("Exp = {0}\nexplds = {1}\nTokenType = {2}\nTokType = {3}", expression.toString(), explds,
                 token.toString(), tokType);
     }
 
@@ -184,14 +182,19 @@ public class InfixParser {
     }
 
     //  Кинуть ошибку
-    private void handleErr(int nOEXP2) throws ParserException {
+    private void handleErr(ErrorType errorType) throws ParserException {
 
-        String[] err = {
-                "Syntax error",
-                "No Expression Present",
-                "Division by zero"
-        };
-        throw new ParserException(err[nOEXP2]);
+        switch (errorType){
+
+            case SYNTAXERROR:
+                throw new ParserException("Syntax error");
+
+            case NOEXP:
+                throw new ParserException("No Expression Present");
+
+            case DIVBYZERO:
+                throw new ParserException("Division by zero");
+        }
     }
 }
 
