@@ -37,7 +37,17 @@ public class TestMain {
         } catch (Exception e) {
 
         }
+    }
 
+    @Test(expected = ParserException.class)
+    public void testEvaluateWithInvalidExpression() throws ParserException {
 
+        infixParser.evaluate("invalid expression");
+    }
+
+    @Test(expected = ParserException.class)
+    public void testEvaluateWithoutExpression() throws ParserException {
+
+        infixParser.evaluate("");
     }
 }
