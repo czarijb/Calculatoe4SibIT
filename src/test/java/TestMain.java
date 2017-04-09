@@ -1,53 +1,52 @@
 import com.github.czarijb.*;
 import org.junit.Assert;
 import org.junit.Test;
-
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.text.ParseException;
 
-/**
- * Created by aleksandr on 09.04.17.
- */
 public class TestMain {
     InfixParser infixParser = new InfixParser();
+    JokeCheatCode jokeCheatCode = new JokeCheatCode();
 
     @Test
-    public void testEvaluate() throws ParserException {
+    public void testEvaluate() throws ParseException {
         double res = infixParser.evaluate("1-2+5*5/25");
         Assert.assertTrue(res == 0.00);
     }
 
-    JokeCheatCode jokeCheatCode = new JokeCheatCode();
-
     @Test
     public void testCheatCode() throws Exception {
-        double res = jokeCheatCode.cheatCode("1-2+5*5/25+1/2");
-        Assert.assertTrue(res == 0.5);
+        double res = jokeCheatCode.cheatCode("1-2+5*5/25");
+        Assert.assertTrue(res < 0.0000001);
     }
+
     @Test
     public void testHandleErr() {
-
         Method method = null;
         String testString = "No Expression Present";
+
         try {
             method = InfixParser.class.getDeclaredMethod("handleErr");
             method.setAccessible(true);
             String str = (String) method.invoke(infixParser, ErrorType.NOEXP);
             Assert.assertTrue(str.equals(testString));
-        } catch (Exception e) {
+        } catch (NoSuchMethodException e) {
+
+        }catch ( IllegalAccessException e){
+
+        }catch (InvocationTargetException e){
 
         }
     }
 
-    @Test(expected = ParserException.class)
-    public void testEvaluateWithInvalidExpression() throws ParserException {
-
+    @Test(expected = ParseException.class)
+    public void testEvaluateWithInvalidExpression() throws ParseException {
         infixParser.evaluate("invalid expression");
     }
 
-    @Test(expected = ParserException.class)
-    public void testEvaluateWithoutExpression() throws ParserException {
-
+    @Test(expected = ParseException.class)
+    public void testEvaluateWithoutExpression() throws ParseException {
         infixParser.evaluate("");
     }
 }

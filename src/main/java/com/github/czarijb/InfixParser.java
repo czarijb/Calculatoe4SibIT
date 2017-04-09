@@ -1,48 +1,45 @@
 package com.github.czarijb;
 
-
-import static com.github.czarijb.ErrorType.DIVBYZERO;
-import static com.github.czarijb.ErrorType.NOEXP;
-import static com.github.czarijb.ErrorType.SYNTAXERROR;
+import java.text.ParseException;
+import static com.github.czarijb.ErrorType.*;
 import static com.github.czarijb.TokenType.*;
 
 public class InfixParser {
-
-    private TokenType tokType;
-
     //  The token that defines the end of the expression
-    final String EOFEXPRES = "\0";
+    final static String EOFEXPRES = "\0";
 
     // Variables
+    private TokenType tokType;
     private String expression;
     private int explds;
     private String token;
-
-
 
     public String toString() {
         return String.format("Exp = {0}\nexplds = {1}\nTokenType = {2}\nTokType = {3}", expression.toString(), explds,
                 token.toString(), tokType);
     }
 
-    //  Получить следующую лексему
+    //  Get next token
     private void getToken() {
         tokType = NONE;
         token = "";
 
-        //  Проверка на окончание выражения
+        //  check ends of expression
         if (explds == expression.length()) {
             token = EOFEXPRES;
             return;
         }
-        //  Проверка на пробелы, если есть пробел - игнорируем его.
+
+        //  check spaces, if have - ignore it.
         while (explds < expression.length() && Character.isWhitespace(expression.charAt(explds)))
             ++explds;
-        //  Проверка на окончание выражения
+
+        //  check ends of expression
         if (explds == expression.length()) {
             token = EOFEXPRES;
             return;
         }
+
         if (isDelim(expression.charAt(explds))) {
             token += expression.charAt(explds);
             explds++;
@@ -52,15 +49,16 @@ public class InfixParser {
                 token += expression.charAt(explds);
                 explds++;
                 if (explds >= expression.length())
-                    break;
+                    return;
             }
             tokType = VARIABLE;
         } else if (Character.isDigit(expression.charAt(explds))) {
             while (!isDelim(expression.charAt(explds))) {
                 token += expression.charAt(explds);
                 explds++;
-                if (explds >= expression.length())
-                    break;
+                if (explds >= expression.length()) {
+                    return;
+                }
             }
             tokType = NUMBER;
         } else {
@@ -75,19 +73,17 @@ public class InfixParser {
         return false;
     }
 
-    //  Точка входа анализатора
-    public double evaluate(String expstr) throws ParserException {
-
+    //  entry point analyzer
+    public double evaluate(String expstr) throws ParseException {
         double result;
-
         expression = expstr;
         explds = 0;
         getToken();
 
         if (token.equals(EOFEXPRES))
-            handleErr(NOEXP);   //  Нет выражения
+            handleErr(NOEXP);   //  No expression
 
-        //  Анализ и вычисление выражения
+        //  analyze and calculation expression
         result = evalExp2();
 
         if (!token.equals(EOFEXPRES))
@@ -96,13 +92,13 @@ public class InfixParser {
         return result;
     }
 
-    //  Сложить или вычислить два терма
-    private double evalExp2() throws ParserException {
-
+    //  Addition or subtraction
+    private double evalExp2() throws ParseException {
         char op;
         double result;
         double partialResult;
         result = evalExp3();
+
         while ((op = token.charAt(0)) == '+' ||
                 op == '-') {
             getToken();
@@ -114,14 +110,15 @@ public class InfixParser {
                 case '+':
                     result += partialResult;
                     break;
+                default:
+                     break;
             }
         }
         return result;
     }
 
-    //  Умножить или разделить
-    private double evalExp3() throws ParserException {
-
+    //  Multiplication or division
+    private double evalExp3() throws ParseException {
         char op;
         double result;
         double partialResult;
@@ -139,13 +136,15 @@ public class InfixParser {
                         handleErr(DIVBYZERO);
                     result /= partialResult;
                     break;
+                default:
+                    break;
             }
         }
         return result;
     }
 
-    //  Определить унарные + или -
-    private double evalExp4() throws ParserException {
+    //  To define a unary + or -
+    private double evalExp4() throws ParseException {
         double result;
 
         String op;
@@ -160,10 +159,10 @@ public class InfixParser {
         return result;
     }
 
-    //  Получить значение числа
-    private double atom() throws ParserException {
-
+    //  Get value of the number
+    private double atom() throws ParseException {
         double result = 0.0;
+
         switch (tokType) {
             case NUMBER:
                 try {
@@ -172,7 +171,6 @@ public class InfixParser {
                     handleErr(SYNTAXERROR);
                 }
                 getToken();
-
                 break;
             default:
                 handleErr(SYNTAXERROR);
@@ -181,19 +179,18 @@ public class InfixParser {
         return result;
     }
 
-    //  Кинуть ошибку
-    private void handleErr(ErrorType errorType) throws ParserException {
-
+    //  Throw exception
+    private void handleErr(ErrorType errorType) throws ParseException {
         switch (errorType){
 
             case SYNTAXERROR:
-                throw new ParserException("Syntax error");
+                throw new ParseException("Syntax error", explds);
 
             case NOEXP:
-                throw new ParserException("No Expression Present");
+                throw new ParseException("No Expression Present", explds);
 
             case DIVBYZERO:
-                throw new ParserException("Division by zero");
+                throw new ParseException("Division by zero", explds);
         }
     }
 }
